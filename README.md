@@ -5,7 +5,7 @@
 Named for Clark's nutcracker, which caches tens of thousands of seeds across a mountainside and
 recovers them months later.
 
-A reference implementation. The Night's Watch builds these services and does not run them; any
+A reference implementation. Nuthatch builds these services and does not run them; any
 provider can register.
 
 ## The problem inside the brief
@@ -314,6 +314,6 @@ cd contracts && forge test
 ```
 
 15 contract tests, 65 Rust tests. `graphprotocol/contracts` is pinned to `2629e646…` (main) — see the gotchas in
-`nightswatchhq/horizon-skills`, since the documented `horizon@1.1.0` pin moves several APIs.
+`nuthatch-org/horizon-skills`, since the documented `horizon@1.1.0` pin moves several APIs.
 
 Apache-2.0.
