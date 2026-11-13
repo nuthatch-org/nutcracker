@@ -1,0 +1,75 @@
+# yatr - https://github.com/cargopete/yatr
+
+[env]
+CARGO_TERM_COLOR = "always"
+
+[settings]
+cache = true
+
+[tasks.fmt]
+desc = "Format the Rust workspace"
+run = ["cargo fmt --all"]
+no_cache = true
+
+[tasks.fmt-check]
+desc = "Fail if the Rust workspace is unformatted"
+run = ["cargo fmt --all --check"]
+sources = ["crates/**/*.rs"]
+
+[tasks.lint]
+desc = "Clippy with warnings denied"
+run = ["cargo clippy --workspace --all-targets -- -D warnings"]
+sources = ["crates/**", "Cargo.toml", "Cargo.lock"]
+
+[tasks.test]
+desc = "The Rust test suite"
+run = ["cargo test --workspace"]
+sources = ["crates/**", "Cargo.toml", "Cargo.lock"]
+
+[tasks.leakage]
+desc = "Recall against leakage for the blind index (README figures)"
+run = ["cargo run -p nutcracker-crypto --example leakage"]
+sources = ["crates/nutcracker-crypto/**", "Cargo.lock"]
+
+[tasks.geometry]
+desc = "The same recall on a crowded-cone corpus"
+run = ["cargo run -p nutcracker-crypto --example geometry"]
+sources = ["crates/nutcracker-crypto/**", "Cargo.lock"]
+
+[tasks.real-embeddings]
+desc = "The frontier on the bundled real embeddings"
+run = ["cargo run -p nutcracker-crypto --example real_embeddings"]
+sources = ["crates/nutcracker-crypto/**", "Cargo.lock"]
+
+[tasks.provider]
+desc = "A provider on :8099"
+foreground = true
+run = ["cargo run -p nutcracker-provider"]
+
+[tasks.roundtrip]
+desc = "Seal, write, search and decrypt one memory against a running provider (PROVIDER, default :8099)"
+run = ["cargo run -p nutcracker-agent --example http_roundtrip"]
+no_cache = true
+
+[tasks.sol-deps]
+desc = "Fetch the pinned contracts/lib submodules"
+run = ["git submodule update --init --recursive --depth 1"]
+no_cache = true
+
+[tasks.sol-fmt-check]
+desc = "Fail if the Solidity sources are unformatted"
+cwd = "contracts"
+run = ["forge fmt --check"]
+sources = ["src/**", "test/**", "foundry.toml"]
+
+[tasks.sol-test]
+desc = "The contract tests"
+depends = ["sol-deps"]
+cwd = "contracts"
+run = ["forge test"]
+sources = ["src/**", "test/**", "foundry.toml", "foundry.lock", "remappings.txt"]
+
+[tasks.ci]
+desc = "fmt-check, lint, test, sol-fmt-check, sol-test"
+depends = ["fmt-check", "lint", "test", "sol-fmt-check", "sol-test"]
+run = []
